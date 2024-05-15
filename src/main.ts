@@ -4,7 +4,8 @@ import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
 import {SwaggerHelper} from "./common/helpers/swagger.helper";
 import {AppConfig, Config} from "./configs/config.type";
 import {ConfigService} from "@nestjs/config";
-import {Logger} from "@nestjs/common";
+import { Logger, ValidationPipe } from '@nestjs/common';
+import { GlobalExceptionFilter } from './common/exeptions/global-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,16 @@ async function bootstrap() {
       persistAuthorization: true,
     },
   });
+  app.useGlobalPipes(
+    new ValidationPipe({
+      transform: true, //- цей параметр вказує, що дані будуть автоматично перетворюватись до відповідного типу.
+      forbidNonWhitelisted: true, //- вказує, що будь-які поля, які не вказані в схемі (білому списку), будуть заборонені.
+      whitelist: true, // -- вказує, що будь-які поля, які не вказані в схемі (білому списку), будуть відфільтровані та видалені.
+    }),
+  );
+  app.useGlobalFilters(new GlobalExceptionFilter());
+
+
   const configService = app.get(ConfigService<Config>);
   const appConfig = configService.get<AppConfig>('app');
   await app.listen(appConfig.port, () => {
