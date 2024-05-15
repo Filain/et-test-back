@@ -14,10 +14,14 @@ export class EventListRequestDto {
 
   @IsOptional()
   @IsDate()
-  @Type(() => Date)
   date?: string;
 
   @IsOptional()
   @IsString()
   organizer?: string;
+
+  @Type(() => String)
+  @IsString()
+  @IsOptional()
+  sortBy?: string = '-date';
 }

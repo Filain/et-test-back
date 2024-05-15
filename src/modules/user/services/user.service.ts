@@ -1,27 +1,38 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 
-import { CreateUserDto } from '../dto/request/create-user.dto';
-import { UpdateUserDto } from '../dto/request/update-user.dto';
+import { UserRepository } from '../../repository/services/user.repository';
+import { CreateUserRequestDto } from '../dto/request/create-user.request.dto';
+import { UserListRequestDto } from '../dto/request/user-list.request.dto';
+import { UserResponseDto } from '../dto/responce/user.response.dto';
+import { UserListResponseDto } from '../dto/responce/user-list.response.dto';
+import { UserMapper } from './user.mapper';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(private userRepository: UserRepository) {}
+
+  public async create(dto: CreateUserRequestDto): Promise<UserResponseDto> {
+    const userEvent = await this.userRepository.findOneBy({
+      email: dto.email,
+    });
+
+    if (userEvent && dto.event_id === userEvent.event_id) {
+      throw new ConflictException('User already registered on the event');
+    }
+
+    const user = await this.userRepository.save(
+      this.userRepository.create({ ...dto }),
+    );
+    return UserMapper.toResponseDto(user);
   }
 
-  findAll() {
-    return `This action returns all user`;
+  public async findAll(
+    query: UserListRequestDto,
+  ): Promise<UserListResponseDto> {
+    const [entities, total] = await this.userRepository.findAll(query);
+    return UserMapper.toListResponseDto(entities, total, query);
   }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  public async findAllRegistered(): Promise<number> {
+    return await this.userRepository.countTotalUsersByDate();
   }
 }

@@ -20,7 +20,7 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 30, nullable: true })
   name?: string;
 
-  @Column({ type: 'varchar', unique: true, length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   email?: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })

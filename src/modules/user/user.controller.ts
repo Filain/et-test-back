@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
-import { CreateUserDto } from './dto/request/create-user.dto';
+import { CreateUserRequestDto } from './dto/request/create-user.request.dto';
+import { UserListRequestDto } from './dto/request/user-list.request.dto';
+import { UserResponseDto } from './dto/responce/user.response.dto';
+import { UserListResponseDto } from './dto/responce/user-list.response.dto';
 import { UserService } from './services/user.service';
 
 @ApiTags('Users')
@@ -11,13 +14,22 @@ export class UserController {
 
   @ApiOperation({ summary: 'Create user' })
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  public async create(
+    @Body() dto: CreateUserRequestDto,
+  ): Promise<UserResponseDto> {
+    return await this.userService.create(dto);
   }
 
   @ApiOperation({ summary: 'Get all users' })
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  public async findAll(
+    @Query() query: UserListRequestDto,
+  ): Promise<UserListResponseDto> {
+    return await this.userService.findAll(query);
+  }
+  @ApiOperation({ summary: 'Get all users' })
+  @Get('day')
+  public async findAllRegistered(): Promise<any> {
+    return await this.userService.findAllRegistered();
   }
 }

@@ -13,24 +13,20 @@ export class EventRepository extends Repository<EventEntity> {
     query: EventListRequestDto,
   ): Promise<[EventEntity[], number]> {
     const qb = this.createQueryBuilder('event');
-    const orderOnPage = 12;
+    const eventOnPage = 12;
 
-    if (query.organizer) {
-      qb.where('event.organizer LIKE :organizer', {
-        organizer: `%${query.organizer}%`,
-      });
-    }
-    if (query.title) {
-      qb.where('event.title LIKE :title', { title: `%${query.title}%` });
-    }
-    if (query.date) {
-      qb.where('event.date LIKE :date', { date: `%${query.date}%` });
+
+    if (query.sortBy.startsWith('-')) {
+      query.sortBy = query.sortBy.substring(1);
+      qb.addOrderBy(query.sortBy, 'DESC');
+    } else {
+      qb.addOrderBy(query.sortBy, 'ASC');
     }
 
-    qb.take(orderOnPage);
-    qb.skip(query.page * orderOnPage - orderOnPage);
+    qb.take(eventOnPage);
+    qb.skip(query.page * eventOnPage - eventOnPage);
     const totalCount = await qb.getCount();
-    const pages = Math.ceil(totalCount / orderOnPage);
+    const pages = Math.ceil(totalCount / eventOnPage);
     return [await qb.getMany(), pages];
   }
 }
