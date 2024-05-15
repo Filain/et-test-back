@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { UserEntity } from '../../../database/entities/user.entity';
+import { EventQueryRequestDto } from '../../user/dto/request/event-query.request.dto';
 import { UserListRequestDto } from '../../user/dto/request/user-list.request.dto';
 
 @Injectable()
@@ -36,15 +37,23 @@ export class UserRepository extends Repository<UserEntity> {
     return [await qb.getMany(), pages];
   }
 
-  public async countTotalUsersByDate(): Promise<number> {
+  public async countTotalUsersByDate(
+    query: EventQueryRequestDto,
+  ): Promise<number> {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Задаємо початок дня
     const tomorrow = new Date(today);
     tomorrow.setDate(today.getDate() + 1); // Задаємо початок наступного дня
 
     const qb = this.createQueryBuilder('user');
+    // return await qb
+    //   .where('user.created_at >= :start', { start: today })
+    //   .andWhere('user.created_at < :end', { end: tomorrow })
+    //   .andWhere('user.event_id = :event_id', { event_id: query })
+    //   .getCount();
     return await qb
-      .where('user.created_at >= :start', { start: today })
+      .where('user.event_id = :event_id', { event_id: query.event_id })
+      .andWhere('user.created_at >= :start', { start: today })
       .andWhere('user.created_at < :end', { end: tomorrow })
       .getCount();
   }

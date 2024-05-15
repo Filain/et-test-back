@@ -2,6 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 
 import { UserRepository } from '../../repository/services/user.repository';
 import { CreateUserRequestDto } from '../dto/request/create-user.request.dto';
+import { EventQueryRequestDto } from '../dto/request/event-query.request.dto';
 import { UserListRequestDto } from '../dto/request/user-list.request.dto';
 import { UserResponseDto } from '../dto/responce/user.response.dto';
 import { UserListResponseDto } from '../dto/responce/user-list.response.dto';
@@ -32,7 +33,7 @@ export class UserService {
     const [entities, total] = await this.userRepository.findAll(query);
     return UserMapper.toListResponseDto(entities, total, query);
   }
-  public async findAllRegistered(): Promise<number> {
-    return await this.userRepository.countTotalUsersByDate();
+  public async findAllRegistered(query: EventQueryRequestDto): Promise<number> {
+    return await this.userRepository.countTotalUsersByDate(query);
   }
 }
