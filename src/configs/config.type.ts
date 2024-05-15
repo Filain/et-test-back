@@ -15,4 +15,3 @@ export type MysqlConfig = {
   password: string;
   database: string;
 };
-

@@ -1,23 +1,24 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import {DocumentBuilder, SwaggerModule} from "@nestjs/swagger";
-import {SwaggerHelper} from "./common/helpers/swagger.helper";
-import {AppConfig, Config} from "./configs/config.type";
-import {ConfigService} from "@nestjs/config";
 import { Logger, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+
+import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/exeptions/global-exception.filter';
+import { SwaggerHelper } from './common/helpers/swagger.helper';
+import { AppConfig, Config } from './configs/config.type';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-      .setTitle('ET-test')
-      .setDescription('by Volodymyr Fylypiv')
-      .setVersion('1.0')
-      .build();
+    .setTitle('ET-test')
+    .setDescription('by Volodymyr Fylypiv')
+    .setVersion('1.0')
+    .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerHelper.setDefaultResponses(document);
-  SwaggerModule.setup('docs', app, document,{
+  SwaggerModule.setup('docs', app, document, {
     swaggerOptions: {
       docExpansion: 'list',
       defaultModelsExpandDepth: 3,
@@ -33,13 +34,11 @@ async function bootstrap() {
   );
   app.useGlobalFilters(new GlobalExceptionFilter());
 
-
   const configService = app.get(ConfigService<Config>);
   const appConfig = configService.get<AppConfig>('app');
   await app.listen(appConfig.port, () => {
     Logger.log(`Server running  http://localhost:${appConfig.port}`);
     Logger.log(`Swagger running http://localhost:${appConfig.port}/docs`);
   });
-
 }
 bootstrap();
