@@ -3,10 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-import { AppModule } from './app.module';
 import { GlobalExceptionFilter } from './common/exeptions/global-exception.filter';
 import { SwaggerHelper } from './common/helpers/swagger.helper';
 import { AppConfig, Config } from './configs/config.type';
+import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -27,9 +27,9 @@ async function bootstrap() {
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, //- цей параметр вказує, що дані будуть автоматично перетворюватись до відповідного типу.
-      forbidNonWhitelisted: true, //- вказує, що будь-які поля, які не вказані в схемі (білому списку), будуть заборонені.
-      whitelist: true, // -- вказує, що будь-які поля, які не вказані в схемі (білому списку), будуть відфільтровані та видалені.
+      transform: true,
+      forbidNonWhitelisted: true,
+      whitelist: true,
     }),
   );
   app.useGlobalFilters(new GlobalExceptionFilter());
