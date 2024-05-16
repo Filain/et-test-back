@@ -27,7 +27,7 @@ export class CreateUserRequestDto {
   @ApiProperty({ example: EWhereHere.friends })
   @IsNotEmpty()
   @IsEnum(EWhereHere)
-  where_here?: string;
+  where_hear?: string;
 
   @ApiProperty({ example: '2024-01-01' })
   @IsOptional()

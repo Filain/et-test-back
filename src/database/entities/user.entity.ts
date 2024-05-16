@@ -24,7 +24,7 @@ export class UserEntity {
   email?: string;
 
   @Column({ type: 'varchar', length: 20, nullable: true })
-  where_here?: string;
+  where_hear?: string;
 
   @Column({ type: 'date', nullable: true })
   date_birth?: Date;

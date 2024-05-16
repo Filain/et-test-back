@@ -2,6 +2,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as cors from 'cors';
 
 import { GlobalExceptionFilter } from './common/exeptions/global-exception.filter';
 import { SwaggerHelper } from './common/helpers/swagger.helper';
@@ -10,7 +11,12 @@ import { AppModule } from './modules/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.use(
+    cors({
+      credentials: true,
+      origin: true,
+    }),
+  );
   const config = new DocumentBuilder()
     .setTitle('ET-test')
     .setDescription('by Volodymyr Fylypiv')
@@ -41,4 +47,5 @@ async function bootstrap() {
     Logger.log(`Swagger running http://localhost:${appConfig.port}/docs`);
   });
 }
-bootstrap();
+
+void bootstrap();

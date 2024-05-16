@@ -8,7 +8,7 @@ export class UserMapper {
     return {
       name: userEntity.name,
       email: userEntity.email,
-      where_here: userEntity.where_here,
+      where_hear: userEntity.where_hear,
       date_birth: userEntity.date_birth,
       event_id: userEntity.event_id,
     };
