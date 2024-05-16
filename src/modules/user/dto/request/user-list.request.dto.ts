@@ -1,18 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import {
-  IsDate,
-  IsEnum,
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  Matches,
-  Min,
-} from 'class-validator';
-import { Column, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
-
-import { EWhereHere } from '../../enums/where-here.enum.dto';
+import { IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class UserListRequestDto {
   @IsOptional()
@@ -22,16 +9,6 @@ export class UserListRequestDto {
   @IsOptional()
   @IsString()
   email?: string;
-
-  // @ApiProperty({ example: EWhereHere.friends })
-  // @IsOptional()
-  // @IsEnum(EWhereHere)
-  // where_here?: string;
-  //
-  // @IsOptional()
-  // @IsDate()
-  // @Type(() => Date)
-  // date_birth?: Date;
 
   @Type(() => Number)
   @IsInt()

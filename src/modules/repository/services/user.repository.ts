@@ -12,9 +12,11 @@ export class UserRepository extends Repository<UserEntity> {
   }
   public async findAll(
     query: UserListRequestDto,
+    id: string,
   ): Promise<[UserEntity[], number]> {
     const qb = this.createQueryBuilder('user');
     const usersOnPage = 12;
+    qb.where('user.event_id = :id', { id });
 
     if (query.name) {
       qb.where('user.name LIKE :name', { name: `%${query.name}%` });

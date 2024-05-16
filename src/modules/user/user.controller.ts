@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserRequestDto } from './dto/request/create-user.request.dto';
@@ -22,11 +22,12 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Get all users' })
-  @Get()
+  @Get(':id')
   public async findAll(
+    @Param('id') id: string,
     @Query() query: UserListRequestDto,
   ): Promise<UserListResponseDto> {
-    return await this.userService.findAll(query);
+    return await this.userService.findAll(query, id);
   }
   @ApiOperation({ summary: 'Get all users' })
   @Get('day')

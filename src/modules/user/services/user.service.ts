@@ -29,8 +29,9 @@ export class UserService {
 
   public async findAll(
     query: UserListRequestDto,
+    id: string,
   ): Promise<UserListResponseDto> {
-    const [entities, total] = await this.userRepository.findAll(query);
+    const [entities, total] = await this.userRepository.findAll(query, id);
     return UserMapper.toListResponseDto(entities, total, query);
   }
   public async findAllRegistered(query: EventQueryRequestDto): Promise<number> {
