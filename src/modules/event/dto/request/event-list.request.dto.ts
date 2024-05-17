@@ -23,5 +23,5 @@ export class EventListRequestDto {
   @Type(() => String)
   @IsString()
   @IsOptional()
-  sortBy?: string = '-date';
+  sortBy?: string = 'id';
 }

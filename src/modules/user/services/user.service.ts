@@ -4,7 +4,6 @@ import { UserRepository } from '../../repository/services/user.repository';
 import { CreateUserRequestDto } from '../dto/request/create-user.request.dto';
 import { EventQueryRequestDto } from '../dto/request/event-query.request.dto';
 import { UserListRequestDto } from '../dto/request/user-list.request.dto';
-import { UserResponseDto } from '../dto/responce/user.response.dto';
 import { UserListResponseDto } from '../dto/responce/user-list.response.dto';
 import { UserMapper } from './user.mapper';
 
@@ -12,7 +11,7 @@ import { UserMapper } from './user.mapper';
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  public async create(dto: CreateUserRequestDto): Promise<UserResponseDto> {
+  public async create(dto: CreateUserRequestDto) {
     const userEvent = await this.userRepository.findOneBy({
       email: dto.email,
     });
@@ -24,7 +23,10 @@ export class UserService {
     const user = await this.userRepository.save(
       this.userRepository.create({ ...dto }),
     );
-    return UserMapper.toResponseDto(user);
+    return {
+      status: 201,
+      massage: 'User created',
+    };
   }
 
   public async findAll(
@@ -34,7 +36,7 @@ export class UserService {
     const [entities, total] = await this.userRepository.findAll(query, id);
     return UserMapper.toListResponseDto(entities, total, query);
   }
-  public async findAllRegistered(query: EventQueryRequestDto): Promise<number> {
-    return await this.userRepository.countTotalUsersByDate(query);
+  public async findAllRegistered(id: string): Promise<number> {
+    return await this.userRepository.countTotalUsersByDate(id);
   }
 }

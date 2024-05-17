@@ -15,7 +15,6 @@ export class EventRepository extends Repository<EventEntity> {
     const qb = this.createQueryBuilder('event');
     const eventOnPage = 12;
 
-
     if (query.sortBy.startsWith('-')) {
       query.sortBy = query.sortBy.substring(1);
       qb.addOrderBy(query.sortBy, 'DESC');

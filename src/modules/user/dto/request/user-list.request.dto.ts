@@ -14,7 +14,7 @@ export class UserListRequestDto {
   @IsInt()
   @Min(0)
   @IsOptional()
-  page?: number = 1;
+  page?: number;
 
   @Type(() => String)
   @IsString()

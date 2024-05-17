@@ -19,10 +19,15 @@ export class UserRepository extends Repository<UserEntity> {
     qb.where('user.event_id = :id', { id });
 
     if (query.name) {
-      qb.where('user.name LIKE :name', { name: `%${query.name}%` });
+      qb.where('user.name LIKE :name', { name: `%${query.name}%` }).andWhere(
+        'user.event_id = :id',
+        { id },
+      );
     }
     if (query.email) {
-      qb.where('user.email LIKE :email', { email: `%${query.email}%` });
+      qb.where('user.email LIKE :email', {
+        email: `%${query.email}%`,
+      }).andWhere('user.event_id = :id', { id });
     }
 
     if (query.sortBy.startsWith('-')) {
@@ -39,22 +44,15 @@ export class UserRepository extends Repository<UserEntity> {
     return [await qb.getMany(), pages];
   }
 
-  public async countTotalUsersByDate(
-    query: EventQueryRequestDto,
-  ): Promise<number> {
+  public async countTotalUsersByDate(id: string): Promise<number> {
     const today = new Date();
-    today.setHours(0, 0, 0, 0); // Задаємо початок дня
+    today.setHours(0, 0, 0, 0);
     const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1); // Задаємо початок наступного дня
+    tomorrow.setDate(today.getDate() + 1);
 
     const qb = this.createQueryBuilder('user');
-    // return await qb
-    //   .where('user.created_at >= :start', { start: today })
-    //   .andWhere('user.created_at < :end', { end: tomorrow })
-    //   .andWhere('user.event_id = :event_id', { event_id: query })
-    //   .getCount();
     return await qb
-      .where('user.event_id = :event_id', { event_id: query.event_id })
+      .where('user.event_id = :event_id', { event_id: id })
       .andWhere('user.created_at >= :start', { start: today })
       .andWhere('user.created_at < :end', { end: tomorrow })
       .getCount();

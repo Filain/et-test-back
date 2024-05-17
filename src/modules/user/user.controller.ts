@@ -15,9 +15,7 @@ export class UserController {
 
   @ApiOperation({ summary: 'Create user' })
   @Post()
-  public async create(
-    @Body() dto: CreateUserRequestDto,
-  ): Promise<UserResponseDto> {
+  public async create(@Body() dto: CreateUserRequestDto) {
     return await this.userService.create(dto);
   }
 
@@ -30,10 +28,8 @@ export class UserController {
     return await this.userService.findAll(query, id);
   }
   @ApiOperation({ summary: 'Get all users' })
-  @Get('day')
-  public async findAllRegistered(
-    @Query() query: EventQueryRequestDto,
-  ): Promise<any> {
-    return await this.userService.findAllRegistered(query);
+  @Get('day/:id')
+  public async findAllRegistered(@Param('id') id: string): Promise<any> {
+    return await this.userService.findAllRegistered(id);
   }
 }
