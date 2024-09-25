@@ -30,5 +30,4 @@ export class EventEntity {
 
   @OneToMany(() => UserEntity, (comment) => comment.user)
   event?: UserEntity[];
-
 }
