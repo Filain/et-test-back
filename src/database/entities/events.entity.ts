@@ -16,17 +16,23 @@ export class EventEntity {
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
-  @Column({ type: 'varchar', length: 30, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   title?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  url?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  image?: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  date?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   description?: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   organizer?: string;
-
-  @Column({ type: 'date', nullable: true })
-  date?: string;
 
   @OneToMany(() => UserEntity, (comment) => comment.user)
   event?: UserEntity[];

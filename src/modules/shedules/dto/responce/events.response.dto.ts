@@ -1,15 +1,13 @@
-import { IsString } from 'class-validator';
-
 export class EventsResponseDto {
   title: string;
 
-  description: string;
-
   url: string;
 
-  images: string;
+  image: string;
 
   date: string;
+
+  description: string;
 
   organizer: string;
 }
