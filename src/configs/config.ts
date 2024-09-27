@@ -12,5 +12,5 @@ export default (): Config => ({
     username: process.env.USERNAM || 'fil32',
     password: process.env.PASSWORD || 'admin',
     database: process.env.DATABASE_NAME || 'fil32',
-  }
+  },
 });

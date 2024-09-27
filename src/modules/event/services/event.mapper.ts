@@ -12,6 +12,8 @@ export class EventMapper {
       description: eventEntity.description,
       organizer: eventEntity.organizer,
       date: eventEntity.date,
+      url: eventEntity.url,
+      image: eventEntity.image,
     };
   }
   public static toListResponseDto(

@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
 
 import { UserEntity } from '../../../database/entities/user.entity';
-import { EventQueryRequestDto } from '../../user/dto/request/event-query.request.dto';
 import { UserListRequestDto } from '../../user/dto/request/user-list.request.dto';
 
 @Injectable()

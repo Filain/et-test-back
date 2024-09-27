@@ -5,6 +5,6 @@ export class EventRespounseDto {
   description?: string;
   organizer?: string;
   date?: string;
+  url?: string;
+  image?: string;
 }
-
-
